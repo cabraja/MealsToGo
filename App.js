@@ -1,38 +1,47 @@
+import { React } from "react";
 import { Platform, StatusBar } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { RestaurantScreen } from "./src/features/restaurants/screens/restaurant.screen";
+import { ThemeProvider } from "styled-components/native";
+import { theme } from "./src/infrastructure/theme/index";
+
+// FONTS
+import {
+  useFonts as useOswald,
+  Oswald_400Regular,
+} from "@expo-google-fonts/oswald";
+import {
+  useFonts as useLato,
+  Lato_400Regular,
+  Lato_700Bold,
+} from "@expo-google-fonts/lato";
 
 export default function App() {
-	return (
-		<>
-			<View style={styles.container}>
-				<View style={styles.searchContainer}>
-					<Text>Search</Text>
-				</View>
+  const [oswaldLoaded] = useOswald({
+    Oswald_400Regular,
+  });
+  const [latoLoaded] = useLato({
+    Lato_400Regular,
+    Lato_700Bold,
+  });
 
-				<View style={styles.mainContainer}>
-					<Text>Main content</Text>
-				</View>
-			</View>
-			<ExpoStatusBar style="auto" />
-		</>
-	);
+  if (!oswaldLoaded || !latoLoaded) {
+    return null;
+  }
+
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        <RestaurantScreen />
+      </ThemeProvider>
+      <ExpoStatusBar style="auto" />
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	searchContainer: {
-		backgroundColor: "#ACC5FF",
-		justifyContent: "center",
-		padding: 20,
-		marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-	},
-	mainContainer: {
-		flex: 1,
-		backgroundColor: "#dfe9ff",
-		justifyContent: "center",
-		alignItems: "center",
-	},
+  container: {
+    flex: 1,
+  },
 });
