@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/native";
 import { Spacer } from "../../../components/spacers/spacer.components";
+import { colors } from "../../../infrastructure/theme/colors";
 import {
   View,
   StyleSheet,
-  ScrollView,
+  Text,
   FlatList,
   Platform,
   StatusBar,
 } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { Searchbar, ActivityIndicator } from "react-native-paper";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
+import { RestaurantContext } from "../../../services/restaurant/restaurant.context";
 
 const SearchContainer = styled.View`
   background-color: ${(props) => props.theme.colors.bg.primary};
@@ -26,7 +28,17 @@ const RestaurantsContainer = styled.ScrollView`
   padding: ${(props) => props.theme.space[3]};
 `;
 
+const LoadingContainer = styled.View`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const RestaurantScreen = () => {
+  const data = useContext(RestaurantContext);
+
   return (
     <View style={styles.container}>
       <SearchContainer>
@@ -34,15 +46,25 @@ export const RestaurantScreen = () => {
       </SearchContainer>
 
       <RestaurantsContainer>
-        <FlatList
-          data={[{ name: 1 }, { name: 2 }]}
-          renderItem={() => (
-            <Spacer position={"bottom"} size={"xl"}>
-              <RestaurantInfoCard />
-            </Spacer>
-          )}
-          keyExtractor={(item) => item.name}
-        />
+        {!data.isLoading ? (
+          <FlatList
+            data={data.restaurants}
+            renderItem={({ item }) => (
+              <Spacer position={"bottom"} size={"xl"}>
+                <RestaurantInfoCard restaurant={item} />
+              </Spacer>
+            )}
+            keyExtractor={(item) => item.name}
+          />
+        ) : (
+          <LoadingContainer>
+            <ActivityIndicator
+              animating={true}
+              color={colors.ui.primary}
+              size={50}
+            />
+          </LoadingContainer>
+        )}
       </RestaurantsContainer>
     </View>
   );

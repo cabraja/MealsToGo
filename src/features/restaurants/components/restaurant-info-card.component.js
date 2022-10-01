@@ -24,8 +24,8 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
     photos = [
       "https://images.unsplash.com/photo-1628591697740-4378f154b2ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
     ],
-    address = "100 Random Street",
-    isOpenNow = true,
+    vicinity,
+    isOpenNow,
     rating = 3.8,
     isClosedTemp,
   } = restaurant;
@@ -48,7 +48,7 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
           </RatingView>
         </Spacer>
 
-        <Text variant="subtitle">{address}</Text>
+        <Text variant="subtitle">{vicinity}</Text>
       </Card.Content>
     </RestaurantCard>
   );
